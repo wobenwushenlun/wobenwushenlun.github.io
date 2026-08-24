@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero shell">
+  <div class="page-hero-copy"><span class="eyebrow">{{ about.eyebrow | default('WHO / WHY') }}</span><h1>{{ about.title }}</h1><p>{{ about.description }}</p></div>
+  <div class="page-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+</section>
+<section class="shell prose page-content">{{ about_content | safe }}</section>
+{% endblock %}
+

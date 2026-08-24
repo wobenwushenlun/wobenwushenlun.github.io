@@ -1,0 +1,19 @@
+title: "人生=模型"
+description: "有空就更新一点个人技术学习记录，把零散的问题、试过的方法和偶尔冒出来的想法，慢慢放进这里。"
+url: "https://wobenwushenlun.github.io"
+baseurl: ""
+timezone: Asia/Shanghai
+lang: zh-CN
+
+author:
+  name: "wobenwushenlun"
+  github: "wobenwushenlun"
+  role: "持续学习中的开发者"
+
+social:
+  name: "wobenwushenlun"
+  links:
+    - "https://github.com/wobenwushenlun"
+
+generator: "Life Model Static Generator"
+

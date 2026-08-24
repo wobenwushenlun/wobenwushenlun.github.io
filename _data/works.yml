@@ -1,0 +1,13 @@
+- name: 技术学习札记
+  type: THIS BLOG
+  status: 持续更新
+  description: 把学到的概念、踩过的坑和做过的小实验，整理成以后还能读懂的记录。
+  url: /#notes
+  accent: sage
+- name: GitHub 实验场
+  type: OPEN SOURCE
+  status: 随缘生长
+  description: 代码、练习和那些“先做出来再说”的小项目，都会陆续留在这里。
+  url: https://github.com/wobenwushenlun
+  accent: peach
+

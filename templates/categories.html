@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero shell">
+  <div class="page-hero-copy"><span class="eyebrow">TOPIC / INDEX</span><h1>分类</h1><p>{{ page_description }}</p></div>
+  <div class="page-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+</section>
+<section class="shell page-content">
+  {% if categories %}
+  <ul class="category-list">
+    {% for category in categories %}
+    <li class="category-block" id="{{ category.slug }}">
+      <h2 class="category-name">#{{ category.name }} <span>{{ category.count }}</span></h2>
+      <ul class="category-posts">
+        {% for post in category.posts %}<li><a href="{{ post.url }}"><strong>{{ post.title }}</strong><time datetime="{{ post.date_iso }}">{{ post.date_display }}</time></a></li>{% endfor %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}<div class="empty-state">还没有分类，先去写一篇札记吧。</div>{% endif %}
+</section>
+{% endblock %}
+

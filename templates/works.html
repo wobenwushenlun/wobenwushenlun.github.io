@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero shell">
+  <div class="page-hero-copy"><span class="eyebrow">MADE / IN PROGRESS</span><h1>作品</h1><p>{{ page_description }}</p></div>
+  <div class="page-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+</section>
+<section class="shell page-content">
+  <div class="works-grid">
+    {% for work in site.works %}
+    <a class="work-card {{ work.accent }}" href="{{ work.url }}"{% if not work.url.startswith('/') %} target="_blank" rel="noreferrer"{% endif %}>
+      <span class="work-top"><span>{{ work.type }}</span><span>{{ work.status }}</span></span>
+      <h2>{{ work.name }}</h2><p>{{ work.description }}</p><span class="work-arrow" aria-hidden="true">↗</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,9 @@
+- label: 札记
+  url: /#notes
+- label: 分类
+  url: /categories/
+- label: 作品
+  url: /works/
+- label: 关于
+  url: /about/
+

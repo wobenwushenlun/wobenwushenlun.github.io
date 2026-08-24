@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="{{ site.lang | default('zh-CN') }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f2e9">
+    <title>{% if page_title %}{{ page_title }} · {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{{ page_description }}">
+    <meta name="author" content="{{ site.author.name }}">
+    <link rel="canonical" href="{{ site.url }}{{ page_url }}">
+    <meta property="og:type" content="{% if body_class == 'post-page' %}article{% else %}website{% endif %}">
+    <meta property="og:title" content="{% if page_title %}{{ page_title }} · {% endif %}{{ site.title }}">
+    <meta property="og:description" content="{{ page_description }}">
+    <meta property="og:url" content="{{ site.url }}{{ page_url }}">
+    <meta property="og:locale" content="zh_CN">
+    <meta name="twitter:card" content="summary">
+    <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="/feed.xml">
+    <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/css/style.css">
+  </head>
+  <body class="{{ body_class }}">
+    <a class="skip-link" href="#main">跳到正文</a>
+    <header class="site-header" data-header>
+      <div class="shell header-inner">
+        <a class="brand" href="/" aria-label="返回首页">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="brand-name">人生<span>=</span>模型</span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+          <span class="sr-only">打开导航</span><span></span><span></span>
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="主导航" data-menu>
+          {% for item in site.navigation %}<a href="{{ item.url }}">{{ item.label }}</a>{% endfor %}
+          <a class="nav-github" href="https://github.com/{{ site.author.github }}" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">{% block content %}{% endblock %}</main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div>
+          <a class="footer-brand" href="/">人生<span>=</span>模型</a>
+          <p>{{ site.description }}</p>
+        </div>
+        <div class="footer-links">
+          <span class="footer-label">EXPLORE</span>
+          {% for item in site.navigation %}<a href="{{ item.url }}">{{ item.label }}</a>{% endfor %}
+        </div>
+        <div class="footer-note">
+          <span class="footer-label">CURRENT STATE</span>
+          <p><span class="status-dot"></span> 正在继续训练</p>
+          <a href="https://github.com/{{ site.author.github }}" target="_blank" rel="noreferrer">@{{ site.author.github }} ↗</a>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <span>© 2026 {{ site.author.name }}</span>
+        <span>Generated with Python · Hosted on GitHub Pages</span>
+      </div>
+    </footer>
+    <script src="/assets/js/main.js" defer></script>
+  </body>
+</html>
+

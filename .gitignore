@@ -1,0 +1,9 @@
+.conda/
+.jekyll-conda/
+_site/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+.edge-preview*/
+preview-*.png
