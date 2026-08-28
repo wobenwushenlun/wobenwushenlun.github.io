@@ -852,13 +852,13 @@ img {
 }
 
 .prose h2 {
-  margin: 2.8em 0 0.8em;
-  font-size: 1.85rem;
+  margin: 2.45em 0 0.72em;
+  font-size: 1.52rem;
 }
 
 .prose h3 {
-  margin: 2.2em 0 0.6em;
-  font-size: 1.3rem;
+  margin: 1.9em 0 0.5em;
+  font-size: 1.16rem;
 }
 
 .prose p,
@@ -1140,12 +1140,12 @@ img {
 }
 
 .post-hero h1 {
-  max-width: 940px;
+  max-width: 900px;
   margin: 24px 0;
   font-family: var(--serif);
-  font-size: clamp(2.8rem, 6.8vw, 6.1rem);
+  font-size: clamp(2.05rem, 4.2vw, 3.6rem);
   font-weight: 560;
-  line-height: 1.16;
+  line-height: 1.2;
   letter-spacing: -0.072em;
 }
 
@@ -1628,7 +1628,7 @@ img {
   }
 
   .post-hero h1 {
-    font-size: 2.75rem;
+    font-size: 1.9rem;
   }
 
   .post-body {
@@ -1641,7 +1641,7 @@ img {
   }
 
   .prose h2 {
-    font-size: 1.55rem;
+    font-size: 1.38rem;
   }
 
   .post-nav {
