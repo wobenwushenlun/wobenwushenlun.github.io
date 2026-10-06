@@ -165,7 +165,7 @@ def render_feed(site: dict[str, Any], posts: list[dict[str, Any]]) -> str:
 
 
 def render_sitemap(site: dict[str, Any], posts: list[dict[str, Any]]) -> str:
-    urls = ["/", "/categories/", "/works/", "/about/"] + [post["url"] for post in posts]
+    urls = ["/", "/ai-infra/", "/categories/", "/works/", "/about/"] + [post["url"] for post in posts]
     rows = [f"  <url><loc>{xml_escape(site['url'] + url)}</loc></url>" for url in urls]
     return "\n".join(
         [
@@ -182,6 +182,7 @@ def build() -> None:
     site = load_yaml(ROOT / "_config.yml")
     site["navigation"] = load_yaml(ROOT / "_data" / "navigation.yml")
     site["works"] = load_yaml(ROOT / "_data" / "works.yml")
+    site["ai_infra"] = load_yaml(ROOT / "_data" / "ai_infra.yml")
     posts = load_posts()
     categories = category_index(posts)
 
@@ -210,6 +211,16 @@ def build() -> None:
             page_description=site["description"],
             page_url="/",
             body_class="home",
+        ),
+    )
+    write_text(
+        "ai-infra/index.html",
+        env.get_template("ai_infra.html").render(
+            **common,
+            page_title="AI Infra 学习地图",
+            page_description="从模型成本、GPU 与通信、分布式训练到推理运行时和服务化的学习路线与实践清单。",
+            page_url="/ai-infra/",
+            body_class="infra-page",
         ),
     )
     write_text(

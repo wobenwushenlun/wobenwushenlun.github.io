@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="infra-hero shell">
+  <span class="eyebrow">AI INFRA / LEARNING MAP</span>
+  <h1>大模型 AI Infra<br><span>学习地图</span></h1>
+  <p>从单个算子的成本，到多卡训练、推理调度和线上服务。这里记录我准备掌握的知识与可以检验理解程度的实践任务。</p>
+  <div class="infra-hero-meta"><span>{{ "%02d" | format(site.ai_infra.stages | length) }} 个阶段</span><span>{{ "%02d" | format(site.ai_infra.projects | length) }} 个实践项目</span><span>持续更新</span></div>
+</header>
+
+<nav class="infra-jump" aria-label="学习阶段">
+  <div class="shell infra-jump-inner">
+    {% for stage in site.ai_infra.stages %}<a href="#{{ stage.id }}"><span>{{ stage.number }}</span> {{ stage.title }}</a>{% endfor %}
+  </div>
+</nav>
+
+<section class="shell infra-intro" aria-labelledby="infra-path-title">
+  <div><span class="section-kicker">THE PATH</span><h2 id="infra-path-title">先建立成本模型，<br>再解释系统行为。</h2></div>
+  <p>判断“学会”的标准是能算、能跑、能测、能解释取舍。前两个阶段打基础；训练和推理可以按实际工作方向分别深入；最后用真实负载验证结论。</p>
+</section>
+
+<section class="shell infra-stages" aria-label="五阶段学习清单">
+  {% for stage in site.ai_infra.stages %}
+  <article class="infra-stage" id="{{ stage.id }}" aria-labelledby="{{ stage.id }}-title">
+    <div class="infra-stage-index"><span>{{ stage.number }} / {{ "%02d" | format(site.ai_infra.stages | length) }}</span><span class="infra-stage-rule"></span></div>
+    <div class="infra-stage-body">
+      <span class="infra-stage-subtitle">{{ stage.subtitle }}</span>
+      <h2 id="{{ stage.id }}-title">{{ stage.title }}</h2>
+      <p class="infra-stage-summary">{{ stage.summary }}</p>
+      <div class="infra-topic-list">
+        {% for topic in stage.topics %}<div class="infra-topic"><strong>{{ topic.name }}</strong><p>{{ topic.detail }}</p></div>{% endfor %}
+      </div>
+      <div class="infra-stage-outcomes">
+        <div><span>动手做</span><p>{{ stage.practice }}</p></div>
+        <div><span>通过标准</span><p>{{ stage.check }}</p></div>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+
+<section class="shell infra-extensions" aria-labelledby="infra-extensions-title">
+  <div class="infra-section-head"><div><span class="section-kicker">GO DEEPER</span><h2 id="infra-extensions-title">基础跑通后的延伸方向</h2></div><p>按具体模型和工作负载选择，不必同时展开。</p></div>
+  <div class="infra-extension-list">
+    {% for extension in site.ai_infra.extensions %}<div class="infra-extension"><span>{{ "%02d" | format(loop.index) }}</span><h3>{{ extension.title }}</h3><p>{{ extension.detail }}</p></div>{% endfor %}
+  </div>
+</section>
+
+<section class="infra-projects" id="projects" aria-labelledby="infra-projects-title">
+  <div class="shell">
+    <div class="infra-section-head"><div><span class="section-kicker">BUILD TO LEARN</span><h2 id="infra-projects-title">用四个交付物检验理解</h2></div><p>每一步都留下可复现的代码、配置、环境和测量结果。</p></div>
+    <div class="infra-project-list">
+      {% for project in site.ai_infra.projects %}<div class="infra-project"><span>{{ project.number }}</span><h3>{{ project.title }}</h3><p>{{ project.result }}</p></div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="shell infra-resources" id="resources" aria-labelledby="infra-resources-title">
+  <div class="infra-section-head"><div><span class="section-kicker">PRIMARY SOURCES</span><h2 id="infra-resources-title">从官方资料开始</h2></div><p>资料会随版本变化；以实际使用版本的文档和实验结果为准。</p></div>
+  <div class="infra-resource-list">
+    {% for resource in site.ai_infra.resources %}<a href="{{ resource.url }}" target="_blank" rel="noreferrer" class="infra-resource"><span class="infra-resource-org">{{ resource.organization }}</span><strong>{{ resource.name }}</strong><span class="infra-resource-use">{{ resource.use }}</span><span class="infra-resource-arrow" aria-hidden="true">↗</span></a>{% endfor %}
+  </div>
+</section>
+{% endblock %}

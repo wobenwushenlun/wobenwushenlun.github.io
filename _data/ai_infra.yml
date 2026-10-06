@@ -1,0 +1,129 @@
+stages:
+  - id: foundations
+    number: "01"
+    title: 模型成本与数值基础
+    subtitle: 先能算清楚，再谈优化
+    summary: 从一次 Transformer 前向出发，建立参数、激活、KV Cache、算力与带宽的成本模型。
+    topics:
+      - name: 计算图
+        detail: Transformer、Attention、MLP、Prefill 与 Decode 的张量形状和数据流。
+      - name: 显存账本
+        detail: 权重、梯度、优化器状态、激活、KV Cache 各占多少；区分峰值与常驻占用。
+      - name: 数值精度
+        detail: FP32、BF16、FP8、量化与累加精度；舍入、溢出及浮点非结合性。
+      - name: 性能模型
+        detail: FLOPs、内存带宽、算术强度与 Roofline；判断计算瓶颈还是访存瓶颈。
+    practice: 给定模型层数、hidden size、KV heads、上下文和 batch，估算权重及 KV Cache 显存，并和实际 profiler 数据对照。
+    check: 能解释为什么 batch、序列长度或 KV head 数变化会改变显存与吞吐，且能说明估算误差来自哪里。
+
+  - id: gpu-communication
+    number: "02"
+    title: GPU、Kernel 与通信
+    subtitle: 看懂数据如何在机器里移动
+    summary: 把模型算子放进 GPU 内存层级和多卡网络中，理解性能损失发生的位置。
+    topics:
+      - name: GPU 执行
+        detail: SM、warp、HBM、共享内存、寄存器、Tensor Core 与 CUDA stream。
+      - name: Kernel 优化
+        detail: GEMM、Softmax、算子融合、tiling、FlashAttention 与 Triton 入门。
+      - name: 集合通信
+        detail: All-Reduce、All-Gather、Reduce-Scatter、All-to-All 的输入输出与典型用途。
+      - name: 机器拓扑
+        detail: PCIe、NVLink/NVSwitch、RDMA 与跨节点网络；通信量、延迟和计算重叠。
+    practice: 用 PyTorch profiler 观察一次矩阵乘法与通信；写一个简单 Triton 算子并做正确性及延迟对比。
+    check: 能从 trace 判断主要时间花在计算、显存传输还是跨卡通信，并提出一个可验证的优化假设。
+
+  - id: distributed-training
+    number: "03"
+    title: 分布式训练
+    subtitle: 模型、数据和状态分别怎么切
+    summary: 从 DDP 走到 FSDP/ZeRO，再理解 TP、PP、CP、SP 与 MoE 的 EP 如何组合。
+    topics:
+      - name: 数据与状态
+        detail: DDP 的梯度同步；FSDP/ZeRO 的参数、梯度、优化器状态分片及生命周期。
+      - name: 模型并行
+        detail: TP 切层内矩阵、PP 切层、CP 切上下文、SP 切部分激活、EP 切专家。
+      - name: 训练稳定性
+        detail: 混合精度、梯度累积、激活重计算、梯度裁剪、随机种子与确定性边界。
+      - name: 故障恢复
+        detail: 分片 checkpoint、恢复训练、数据顺序、hang/OOM 排查与训练吞吐统计。
+    practice: 在 2 张 GPU 上分别跑 DDP 和 FSDP2 的同一小模型，记录单卡峰值显存、step time 和通信开销。
+    check: 能根据“参数放不下、激活放不下、通信过慢”三种症状选择并行策略，并解释代价。
+
+  - id: inference-runtime
+    number: "04"
+    title: 推理运行时
+    subtitle: 从一条请求走到一批请求
+    summary: 理清请求调度、KV Cache、Attention 内核和解码策略如何共同决定延迟与吞吐。
+    topics:
+      - name: 请求生命周期
+        detail: Tokenization、Prefill、Decode、流式输出；TTFT 与 TPOT 分别受什么影响。
+      - name: KV Cache
+        detail: PagedAttention 的 block 管理、前缀缓存与 RadixAttention 的复用条件和淘汰策略。
+      - name: 调度与加速
+        detail: Continuous batching、chunked prefill、量化、推测解码与 Prefill/Decode 分离。
+      - name: 框架实践
+        detail: 用同一模型和流量对比 vLLM 与 SGLang；检查模型、硬件和后端的实际支持情况。
+    practice: 生成独立请求与共享长前缀两组流量，对比缓存命中率、TTFT、TPOT、吞吐和显存。
+    check: 能指出优化改善的是 Prefill、Decode 还是并发容量，并解释为何单项指标提高不代表整体更快。
+
+  - id: serving-operations
+    number: "05"
+    title: 服务化与性能诊断
+    subtitle: 让系统可测、可用、可恢复
+    summary: 把推理引擎作为线上系统运行，围绕负载、SLO、资源和故障做工程判断。
+    topics:
+      - name: 服务接口
+        detail: OpenAI 兼容 API、流式响应、并发限制、请求队列、取消和超时。
+      - name: 容量规划
+        detail: 请求到达率、输入/输出长度分布、吞吐与延迟曲线、goodput、尾延迟及成本。
+      - name: 观测与定位
+        detail: 指标、日志、trace、GPU profiler；区分模型、调度、网络和应用层瓶颈。
+      - name: 部署与恢复
+        detail: 容器化、滚动发布、健康检查、容量保护、多租户隔离与故障演练。
+    practice: 为推理服务写一份负载测试报告：固定模型和硬件，扫描并发，展示 P50/P99 TTFT、TPOT、吞吐与 OOM 点。
+    check: 能基于数据提出容量上限与告警阈值，并在一个故障场景中给出定位顺序和回退方案。
+
+extensions:
+  - title: MoE 系统
+    detail: 专家路由、token dispatch、All-to-All、负载均衡与专家放置；重点分析通信和显存的变化。
+  - title: 长上下文与多模态
+    detail: CP、长序列 Attention、图像/视频 token 展开、编码器计算及多模态 KV Cache 的容量问题。
+  - title: 后训练与 Agent RL
+    detail: Rollout、Actor/Reference/Reward worker、同步与异步采样、权重同步及训练与推理引擎的衔接。
+
+projects:
+  - number: "A"
+    title: 算清一张卡
+    result: 一个可输入模型参数的显存估算脚本，加上与实际运行数据的误差分析。
+  - number: "B"
+    title: 跑通两张卡
+    result: DDP 与 FSDP2 对照实验，记录显存、step time、通信和检查点恢复。
+  - number: "C"
+    title: 做一次推理 A/B
+    result: vLLM 与 SGLang 使用同一模型、精度、硬件和流量，比较独立请求及共享前缀请求。
+  - number: "D"
+    title: 交付一份容量报告
+    result: 用 TTFT、TPOT、P99、goodput 和成本解释一个具体服务配置的取舍。
+
+resources:
+  - name: CUDA Programming Guide
+    organization: NVIDIA
+    url: https://docs.nvidia.com/cuda/cuda-programming-guide/
+    use: 先读 GPU 执行模型、内存层级和异步执行，用来解释 kernel 为什么快或慢。
+  - name: FSDP2 Tutorial
+    organization: PyTorch
+    url: https://docs.pytorch.org/tutorials/intermediate/FSDP_tutorial.html
+    use: 跑通参数聚合、重新分片与梯度通信，完成 DDP/FSDP 对照实验。
+  - name: Parallelism Strategies Guide
+    organization: Megatron Core
+    url: https://docs.nvidia.com/megatron-core/developer-guide/latest/user-guide/parallelism-guide.html
+    use: 对照 DP、TP、PP、CP、EP 的切分维度、适用条件和通信成本。
+  - name: Automatic Prefix Caching
+    organization: vLLM
+    url: https://docs.vllm.ai/en/latest/design/prefix_caching/
+    use: 跟踪 block hash、分配与淘汰流程，理解前缀命中为何有粒度限制。
+  - name: Bench Serving Guide
+    organization: SGLang
+    url: https://docs.sglang.ai/developer_guide/bench_serving
+    use: 用同一套流量定义 TTFT、ITL、吞吐和共享前缀场景，完成推理 A/B。
