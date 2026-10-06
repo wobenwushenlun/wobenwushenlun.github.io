@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime, timezone
 
-from build import reading_order
+from build import post_navigation, reading_order
 
 
 def post(slug, category, day, **metadata):
@@ -76,6 +76,33 @@ class ReadingOrderTests(unittest.TestCase):
         self.assertEqual(reading_order([]), [])
         single = post("only", "Notes", 1)
         self.assertEqual(reading_order([single]), [single])
+
+    def test_cross_category_links_always_enter_first_chapter(self):
+        posts = [
+            post("a-02-later", "A", 1),
+            post("a-01-first", "A", 2),
+            post("b-01-first", "B", 3),
+            post("b-02-later", "B", 4),
+            post("c-01-first", "C", 5),
+        ]
+        nav = post_navigation(posts)
+        self.assertEqual(nav["b-01-first"]["previous_post"]["slug"], "a-01-first")
+        self.assertEqual(nav["a-02-later"]["next_post"]["slug"], "b-01-first")
+        self.assertEqual(nav["b-02-later"]["next_post"]["slug"], "c-01-first")
+        self.assertEqual(nav["b-01-first"]["next_post"]["slug"], "b-02-later")
+        self.assertEqual(nav["b-02-later"]["previous_post"]["slug"], "b-01-first")
+        self.assertEqual(nav["b-02-later"]["chapter_position"], 2)
+        self.assertEqual(nav["b-02-later"]["chapter_count"], 2)
+        self.assertIsNone(nav["a-01-first"]["previous_post"])
+        self.assertIsNone(nav["c-01-first"]["next_post"])
+
+    def test_empty_and_single_navigation(self):
+        self.assertEqual(post_navigation([]), {})
+        nav = post_navigation([post("only", "Notes", 1)])["only"]
+        self.assertEqual(nav, {
+            "previous_post": None, "next_post": None,
+            "chapter_position": 1, "chapter_count": 1,
+        })
 
 
 if __name__ == "__main__":

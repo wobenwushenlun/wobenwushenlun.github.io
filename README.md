@@ -69,6 +69,8 @@ YYYY-MM-DD-英文标题.md
 
 修改阅读顺序逻辑后，可运行 `.\.conda\python.exe -m unittest test_navigation` 检查章节排序与分类边界。
 
+跨分类时，无论上一分类还是下一分类，都进入目标分类阅读顺序的第一篇。标题摘要下方提供吸顶阅读导航，显示分类和当前篇数；文末保留完整标题导航。跨分类链接使用“上一分类 / 下一分类”标签，与同类上下篇区分。
+
 ## 发布到 GitHub Pages
 
 1. 在 GitHub 创建公开仓库 `wobenwushenlun.github.io`。

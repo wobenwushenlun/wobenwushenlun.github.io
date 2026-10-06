@@ -17,6 +17,7 @@
     <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="/feed.xml">
     <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/assets/css/style.css">
+    {% block styles %}{% endblock %}
   </head>
   <body class="{{ body_class }}">
     <a class="skip-link" href="#main">跳到正文</a>
@@ -64,4 +65,3 @@
     <script src="/assets/js/main.js" defer></script>
   </body>
 </html>
-

@@ -154,6 +154,29 @@ def reading_order(posts: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
+def post_navigation(posts: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for post in reading_order(posts):
+        grouped.setdefault(post["category"], []).append(post)
+    groups = list(grouped.values())
+    navigation = {}
+    for group_index, chapters in enumerate(groups):
+        for index, post in enumerate(chapters):
+            previous = chapters[index - 1] if index else (
+                groups[group_index - 1][0] if group_index else None
+            )
+            following = chapters[index + 1] if index + 1 < len(chapters) else (
+                groups[group_index + 1][0] if group_index + 1 < len(groups) else None
+            )
+            navigation[post["slug"]] = {
+                "previous_post": previous,
+                "next_post": following,
+                "chapter_position": index + 1,
+                "chapter_count": len(chapters),
+            }
+    return navigation
+
+
 def render_feed(site: dict[str, Any], posts: list[dict[str, Any]]) -> str:
     updated = posts[0]["date_iso"] if posts else datetime.now().isoformat()
     entries = []
@@ -291,17 +314,14 @@ def build() -> None:
         ),
     )
 
-    ordered_posts = reading_order(posts)
-    for index, post in enumerate(ordered_posts):
-        previous_post = ordered_posts[index - 1] if index > 0 else None
-        next_post = ordered_posts[index + 1] if index + 1 < len(ordered_posts) else None
+    navigation = post_navigation(posts)
+    for post in posts:
         write_text(
             f"notes/{post['slug']}/index.html",
             env.get_template("post.html").render(
                 **common,
                 post=post,
-                previous_post=previous_post,
-                next_post=next_post,
+                **navigation[post["slug"]],
                 page_title=post["title"],
                 page_description=post["excerpt"],
                 page_url=post["url"],
