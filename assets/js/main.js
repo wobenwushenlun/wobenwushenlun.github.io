@@ -25,6 +25,26 @@
     });
   }
 
+  const categoryDirectory = document.querySelector("[data-category-directory]");
+  if (categoryDirectory) {
+    const categorySummary = categoryDirectory.querySelector("summary");
+    document.addEventListener("pointerdown", (event) => {
+      if (!categoryDirectory.contains(event.target)) categoryDirectory.open = false;
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && categoryDirectory.open) {
+        event.preventDefault();
+        categoryDirectory.open = false;
+        categorySummary.focus({ preventScroll: true });
+      }
+    });
+    categoryDirectory.addEventListener("focusout", (event) => {
+      if (event.relatedTarget && !categoryDirectory.contains(event.relatedTarget)) {
+        categoryDirectory.open = false;
+      }
+    });
+  }
+
   document.querySelectorAll(".prose table").forEach((table) => {
     const scroll = document.createElement("div");
     scroll.className = "table-scroll";

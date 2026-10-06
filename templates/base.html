@@ -17,6 +17,7 @@
     <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="/feed.xml">
     <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/category-nav.css">
     {% block styles %}{% endblock %}
   </head>
   <body class="{{ body_class }}">
@@ -33,7 +34,19 @@
         </button>
 
         <nav class="site-nav" id="site-nav" aria-label="主导航" data-menu>
-          {% for item in site.navigation %}<a href="{{ item.url }}">{{ item.label }}</a>{% endfor %}
+          {% for item in site.navigation %}
+          {% if item.url == '/categories/' %}
+          <details class="category-directory" data-category-directory>
+            <summary aria-label="展开分类列表">{{ item.label }}</summary>
+            <div class="category-directory-list">
+              {% for category in categories %}
+              <a href="/categories/#{{ category.slug }}"><span>{{ category.name }}</span><span class="category-directory-count">{{ category.count }}</span></a>
+              {% endfor %}
+              <a class="category-directory-all" href="{{ item.url }}">查看全部分类</a>
+            </div>
+          </details>
+          {% else %}<a href="{{ item.url }}">{{ item.label }}</a>{% endif %}
+          {% endfor %}
           <a class="nav-github" href="https://github.com/{{ site.author.github }}" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
