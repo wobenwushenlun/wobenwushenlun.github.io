@@ -18,7 +18,7 @@ pin: false
 
 建议用时 4 小时：概念与资料 45 分钟、实现 60 分钟、预算与检索实验 90 分钟、自测和迁移练习 45 分钟。
 
-系列导航：[第 5 章：工作流与规划](/notes/llm-agent-05-planning/) → **第 6 章**。后续第 7 章将讨论跨任务记忆与 RAG。[第 1 章入口](/notes/llm-agent-01-model-api/) · [实验说明](/assets/learning/llm-agent/README.md)
+系列导航：[第 5 章：工作流与规划](/notes/llm-agent-05-planning/) → **第 6 章** → [第 7 章：记忆与 RAG](/notes/llm-agent-07-memory-rag/)。[第 1 章入口](/notes/llm-agent-01-model-api/) · [实验说明](/assets/learning/llm-agent/README.md)
 
 ## 6.1 上下文工程解决什么问题
 
@@ -295,4 +295,4 @@ python -B -m unittest discover -s assets/learning/llm-agent -p "test_*.py" -v
 - 可信度：离线测试可以验证预算与版本逻辑；检索效果和真实模型质量仍需任务实验。
 - 当前缺口：跨任务的记忆写入、检索、更新与遗忘，第 7 章继续。
 - 掌握状态：待迁移作业与自测；今天完成的是教材与实验基础。
-- 下一步：整理三章失败记录，指出自己最不确定的一个机制，再进入记忆与 RAG。
+- 下一步：整理三章失败记录，指出自己最不确定的一个机制，再进入[第 7 章：记忆与 RAG](/notes/llm-agent-07-memory-rag/)。

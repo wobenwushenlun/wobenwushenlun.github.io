@@ -1,6 +1,6 @@
-# LLM Agent：第 1～6 章实验
+# LLM Agent：第 1～9 章实验
 
-这是博客前六篇讲义的配套教学代码。默认只运行离线示例，不联网、不需要密钥；第 1、3、4 章只有显式添加 `--live` 才会调用可能计费的 Claude API。第 2、5、6 章仅包含离线机制实验。
+这是博客前九篇讲义的配套教学代码。默认只运行离线示例，不联网、不需要密钥；第 1、3、4 章只有显式添加 `--live` 才会调用可能计费的 Claude API。其余章节仅包含离线机制实验。
 
 ## 运行
 
@@ -13,10 +13,13 @@ python assets/learning/llm-agent/ch03_tools.py
 python -B assets/learning/llm-agent/ch04_react.py
 python -B assets/learning/llm-agent/ch05_planning.py --fault
 python -B assets/learning/llm-agent/ch06_context.py --stale-demo
+python -B assets/learning/llm-agent/ch07_memory.py --scenario conflict
+python -B assets/learning/llm-agent/ch08_reflection.py --mode overfit
+python -B assets/learning/llm-agent/ch09_multi_agent.py --scenario unanimous_wrong
 python -B -m unittest discover -s assets/learning/llm-agent -p "test_*.py" -v
 ```
 
-单独下载时保持六个脚本、测试文件与 `fixtures` 子目录的布局；在该目录运行时省略路径前缀即可。第 4～6 章都依赖 `ch03_tools.py` 和原有三个教学文件。
+单独下载时保持九个脚本、测试文件与 `fixtures` 子目录的布局；在该目录运行时省略路径前缀即可。第 4～7、9 章会复用早期章节模块和原有教学文件，第 8 章只需 Python 标准库。
 
 真实 API 分支需要安装 `anthropic`，并在自己的终端安全设置 `ANTHROPIC_API_KEY` 与 `ANTHROPIC_MODEL`。模型 ID 由你根据账户权限选择，不在课程中写死。不要把密钥放在这个公开下载目录，不要提交密钥。
 
@@ -41,12 +44,12 @@ python ch04_react.py --live --mode react
 阶段账本：
 
 - 目标：独立设计、实现和评测 LLM Agent。
-- 当前阶段：前六章教材与实验准备；不是学习者掌握评定。
+- 当前阶段：前九章教材与实验准备；不是学习者掌握评定。
 - 已核对事实：消息请求/响应、工具结果配对和客户端执行职责。
 - 未解决问题：所选模型在真实任务中的表现、成本与错误分布。
 - 掌握分数：未测。
 - 薄弱点：待自测与迁移练习识别。
-- 下一步：完成第 4～6 章的反馈对照、计划修订与上下文选择练习，再进入记忆与 RAG。
+- 下一步：完成第 7～9 章的记忆失效、反馈修正与消息交接练习，再进入 MCP 与 Skills。
 
 ## 阅读路径（五项，按需摘读）
 
@@ -94,3 +97,37 @@ python ch04_react.py --live --mode react
 - 第 4 章三组离线管线正常；第 5 章故障修订保留已完成任务且不重置预算；第 6 章默认示例检测到内存模拟的文件版本变化。
 - 新增覆盖：评分器的证据与类型校验、模型客户端适配替身、无环图与非法修订、字符预算、查询无匹配、来源行号和过期证据。
 - 没有调用真实模型 API；客户端适配替身测试不等同于 SDK 网络联调或模型质量评测。
+
+## 第 7～9 章的项目增量
+
+| 章 | 文件 | 运行与证据边界 |
+| --- | --- | --- |
+| 7 | `ch07_memory.py` | SQLite 持久化和检索；默认创建并清理专属临时数据库，不是完整 RAG 生成应用 |
+| 8 | `ch08_reflection.py` | 脚本 Actor + 真实可信算术检查；不执行模型代码，不改原教学文件 |
+| 9 | `ch09_multi_agent.py` | 顺序模拟角色协议；不启动真实 LLM Agent，也不进行并发计算 |
+
+第 7 章：`normal/conflict/stale/expired/forgotten` 五种场景；关闭连接后重开数据库验证持久化。逻辑时间固定，scope 由宿主选择。`verified` 不能由模型自行赋予；inactive 是停止检索而不是彻底删除。
+
+第 8 章：默认修正、`--mode repeat` 停滞、`--mode overfit` 样例过拟合。审计案例公开在源码中，仅流程隔离，不是真实保密留出集。反思内容也是预设规则，不能据此声称模型学会了自我改进。
+
+第 9 章：正常、冲突、过期证据、缺席与全体一致但错误的报告。消息校验检查宿主发送者、任务与修订号、角色来源范围；独立验证器不接受多数票代替正确性。文件版本只对协调者起始快照校验。
+
+模块复用关系：`ch07 → ch03/ch06`，`ch08 → 标准库`，`ch09 → ch03/ch07/ch08`。本轮三个模块不提供 `--live`；真实模型接入与等预算对照作为文章中的迁移作业。
+
+## 第 7～9 章阅读路径（五项）
+
+1. [RAG 原论文](https://arxiv.org/abs/2005.11401)：30 分钟，提取检索器与生成器接口；第 7 章。先学过上下文选择，注意本课 SQLite 不是原论文实现。
+2. [Reflexion](https://arxiv.org/abs/2303.11366)：30 分钟，辨认反馈与情景记忆的作用；第 8 章。与更新模型参数的训练分开。
+3. [Self-Refine](https://arxiv.org/abs/2303.17651)：25 分钟，比较单次生成与迭代反馈；第 8 章。重点审查额外计算预算。
+4. [AutoGen](https://arxiv.org/abs/2308.08155)：30 分钟，画出 Agent 消息与控制关系；第 9 章。阅读系统设计即可，不要求安装历史版本框架。
+5. [多 Agent 研究系统工程报告](https://www.anthropic.com/engineering/multi-agent-research-system)：30 分钟，分析分工、上下文与评测成本；第 9 章。不要把研究任务上的成绩直接外推到代码任务。
+
+五项资料均可公开阅读；各自服务于不同学习目标。运行本轮实验不需要 API Key，不创建或发送外部消息，不产生模型调用费用。
+
+## 第 7～9 章验证记录（2026-10-06）
+
+- 新增 `test_chapters_07_09.py` 的 27 项测试，连同前六章共 78 项通过。
+- 覆盖记忆数据库重开、作用域过滤、参数化查询、过期/旧版本/冲突记录、去重与字符预算。
+- 覆盖有限修订、停滞、公开测试过拟合与冻结后审计、反馈副本，以及十进制算术边界。
+- 覆盖发送者/任务/修订校验、重复提交、证据范围和版本、缺席预算、全体一致但错误的提议被独立验证器拒绝。
+- 三章示例均为离线机制实验；没有调用真实模型服务，没有开展算法质量或多 Agent 性能基准测试。
