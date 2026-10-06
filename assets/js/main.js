@@ -25,6 +25,20 @@
     });
   }
 
+  document.querySelectorAll(".prose table").forEach((table) => {
+    const scroll = document.createElement("div");
+    scroll.className = "table-scroll";
+    scroll.tabIndex = 0;
+    scroll.setAttribute("role", "region");
+    const headings = Array.from(document.querySelectorAll(".prose h2, .prose h3"));
+    const heading = headings.filter((item) =>
+      item.compareDocumentPosition(table) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).pop();
+    scroll.setAttribute("aria-label", `${heading?.textContent || "文章"}：数据表`);
+    table.before(scroll);
+    scroll.append(table);
+  });
+
   const animated = document.querySelectorAll(".note-row, .latest-card, .topic-pill, .work-card");
   if (!("IntersectionObserver" in window)) {
     animated.forEach((item) => item.classList.add("is-visible"));
@@ -44,4 +58,3 @@
     observer.observe(item);
   });
 })();
-

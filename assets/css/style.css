@@ -905,6 +905,66 @@ img {
   background: transparent;
 }
 
+.prose .table-scroll {
+  max-width: 100%;
+  margin-block: 1.5em;
+  overflow-x: auto;
+  border-block: 1px solid var(--line);
+}
+
+.prose .table-scroll:focus-visible {
+  outline: 2px solid var(--sage-dark);
+  outline-offset: 3px;
+}
+
+.prose .table-scroll table {
+  display: table;
+  width: 100%;
+  margin: 0;
+  overflow: visible;
+  letter-spacing: 0;
+}
+
+.prose .table-scroll th,
+.prose .table-scroll td {
+  min-width: 145px;
+  overflow-wrap: anywhere;
+}
+
+.post-content {
+  overflow-wrap: anywhere;
+}
+
+.prose table {
+  display: block;
+  width: 100%;
+  margin-block: 1.8em;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.prose th,
+.prose td {
+  min-width: 120px;
+  padding: 11px 14px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--line);
+}
+
+.prose th {
+  color: var(--ink);
+  font-weight: 700;
+  background: var(--paper-deep);
+}
+
+.prose tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.46);
+}
+
 .prose hr {
   width: 80px;
   margin: 4em auto;
