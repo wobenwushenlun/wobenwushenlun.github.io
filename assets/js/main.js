@@ -39,6 +39,44 @@
     scroll.append(table);
   });
 
+  const directory = document.querySelector("[data-reading-directory]");
+  if (directory) {
+    const summary = directory.querySelector("summary");
+    const chapterMenu = directory.querySelector(".reading-menu");
+    const fitChapterMenu = () => {
+      if (!directory.open) return;
+      if (window.innerHeight - chapterMenu.getBoundingClientRect().top < 160) {
+        directory.scrollIntoView({ block: "start", behavior: "instant" });
+      }
+      const room = Math.max(120, window.innerHeight - chapterMenu.getBoundingClientRect().top - 16);
+      chapterMenu.style.setProperty("--reading-menu-room", `${room}px`);
+    };
+    directory.addEventListener("toggle", () => {
+      if (!directory.open) return;
+      fitChapterMenu();
+      const current = chapterMenu.querySelector('[aria-current="page"]');
+      if (current) {
+        chapterMenu.scrollTop += current.getBoundingClientRect().top
+          - chapterMenu.getBoundingClientRect().top - chapterMenu.clientHeight / 2
+          + current.clientHeight / 2;
+      }
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!directory.contains(event.target)) directory.open = false;
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && directory.open) {
+        event.preventDefault();
+        directory.open = false;
+        summary.focus({ preventScroll: true });
+      }
+    });
+    directory.addEventListener("focusout", (event) => {
+      if (event.relatedTarget && !directory.contains(event.relatedTarget)) directory.open = false;
+    });
+    window.addEventListener("resize", fitChapterMenu);
+  }
+
   const animated = document.querySelectorAll(".note-row, .latest-card, .topic-pill, .work-card");
   if (!("IntersectionObserver" in window)) {
     animated.forEach((item) => item.classList.add("is-visible"));

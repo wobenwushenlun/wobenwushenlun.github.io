@@ -14,7 +14,17 @@
   <nav class="reading-nav" aria-label="阅读导航">
     <div class="reading-nav-inner shell">
       {% if previous_post %}<a class="reading-previous" href="{{ previous_post.url }}" title="{{ previous_post.title }}" aria-label="{{ previous_label }}：{{ previous_post.title }}">{{ previous_label }}</a>{% else %}<span class="reading-unavailable">已是首篇</span>{% endif %}
-      <a class="reading-category" href="/categories/#{{ post.category | slugify }}" aria-label="{{ post.category }}分类，当前第 {{ chapter_position }} 篇，共 {{ chapter_count }} 篇"><span>{{ post.category }}</span><span class="reading-position">{{ chapter_position }} / {{ chapter_count }}</span></a>
+      <details class="reading-directory" data-reading-directory>
+        <summary class="reading-category" aria-label="{{ post.category }}文章目录，当前第 {{ chapter_position }} 篇，共 {{ chapter_count }} 篇"><span class="reading-category-meta"><span>{{ post.category }}</span><span class="reading-position">{{ chapter_position }} / {{ chapter_count }}</span></span></summary>
+        <div class="reading-menu">
+          <div class="reading-menu-heading"><strong>{{ post.category }}</strong><span>{{ chapter_count }} 篇</span></div>
+          <ol class="reading-chapters">
+            {% for chapter in chapter_posts %}
+            <li><a href="{{ chapter.url }}"{% if chapter.slug == post.slug %} aria-current="page"{% endif %}><span>{{ chapter.title }}</span>{% if chapter.slug == post.slug %}<span class="reading-current">当前</span>{% endif %}</a></li>
+            {% endfor %}
+          </ol>
+        </div>
+      </details>
       {% if next_post %}<a class="reading-next" href="{{ next_post.url }}" title="{{ next_post.title }}" aria-label="{{ next_label }}：{{ next_post.title }}">{{ next_label }}</a>{% else %}<span class="reading-unavailable reading-next">已是末篇</span>{% endif %}
     </div>
   </nav>

@@ -173,6 +173,7 @@ def post_navigation(posts: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
                 "next_post": following,
                 "chapter_position": index + 1,
                 "chapter_count": len(chapters),
+                "chapter_posts": chapters,
             }
     return navigation
 

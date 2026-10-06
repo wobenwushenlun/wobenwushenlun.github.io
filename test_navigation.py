@@ -93,15 +93,21 @@ class ReadingOrderTests(unittest.TestCase):
         self.assertEqual(nav["b-02-later"]["previous_post"]["slug"], "b-01-first")
         self.assertEqual(nav["b-02-later"]["chapter_position"], 2)
         self.assertEqual(nav["b-02-later"]["chapter_count"], 2)
+        self.assertEqual(
+            [chapter["slug"] for chapter in nav["b-02-later"]["chapter_posts"]],
+            ["b-01-first", "b-02-later"],
+        )
         self.assertIsNone(nav["a-01-first"]["previous_post"])
         self.assertIsNone(nav["c-01-first"]["next_post"])
 
     def test_empty_and_single_navigation(self):
         self.assertEqual(post_navigation([]), {})
-        nav = post_navigation([post("only", "Notes", 1)])["only"]
+        single = post("only", "Notes", 1)
+        nav = post_navigation([single])["only"]
         self.assertEqual(nav, {
             "previous_post": None, "next_post": None,
             "chapter_position": 1, "chapter_count": 1,
+            "chapter_posts": [single],
         })
 
 
