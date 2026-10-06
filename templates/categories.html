@@ -11,6 +11,7 @@
     <li class="category-block" id="{{ category.slug }}">
       <h2 class="category-name">#{{ category.name }} <span>{{ category.count }}</span></h2>
       <ul class="category-posts">
+        {% for page in category.pages | default([]) %}<li><a href="{{ page.url }}"><strong>{{ page.title }}</strong><span class="category-entry-kind">专题路线</span></a></li>{% endfor %}
         {% for post in category.posts %}<li><a href="{{ post.url }}"><strong>{{ post.title }}</strong><time datetime="{{ post.date_iso }}">{{ post.date_display }}</time></a></li>{% endfor %}
       </ul>
     </li>
@@ -19,4 +20,3 @@
   {% else %}<div class="empty-state">还没有分类，先去写一篇札记吧。</div>{% endif %}
 </section>
 {% endblock %}
-

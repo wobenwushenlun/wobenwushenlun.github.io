@@ -7,7 +7,7 @@
     <p class="hero-lead">有空就更新一点个人技术学习记录。把零散的问题、试过的方法和偶尔冒出来的想法，慢慢放进这里。</p>
     <div class="hero-actions">
       <a class="button button-primary" href="#notes">开始阅读 <span aria-hidden="true">↓</span></a>
-      <a class="button button-secondary" href="/ai-infra/">AI Infra 学习地图 <span aria-hidden="true">↗</span></a>
+      <a class="button button-secondary" href="https://github.com/{{ site.author.github }}" target="_blank" rel="noreferrer">去 GitHub 看看 <span aria-hidden="true">↗</span></a>
     </div>
   </div>
 
@@ -30,17 +30,6 @@
     <div class="index-cell"><span>STATE</span><strong>β</strong></div>
   </div>
 </div>
-
-<section class="shell infra-home" aria-labelledby="infra-home-title">
-  <div class="infra-home-heading">
-    <div><span class="section-kicker">CURRENT FOCUS / AI INFRA</span><h2 id="infra-home-title">正在搭建的知识地图</h2></div>
-    <p>把问题从“这个名词是什么”推进到“这个系统为什么这样运行”。</p>
-  </div>
-  <div class="infra-home-path">
-    {% for stage in site.ai_infra.stages %}<a href="/ai-infra/#{{ stage.id }}"><span>{{ stage.number }}</span><strong>{{ stage.title }}</strong><span class="infra-home-arrow" aria-hidden="true">↗</span></a>{% endfor %}
-  </div>
-  <a class="text-link" href="/ai-infra/">查看完整学习路线 <span aria-hidden="true">↗</span></a>
-</section>
 
 {% if latest %}
 <section class="section shell" aria-labelledby="latest-title">

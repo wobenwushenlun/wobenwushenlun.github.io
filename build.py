@@ -185,6 +185,14 @@ def build() -> None:
     site["ai_infra"] = load_yaml(ROOT / "_data" / "ai_infra.yml")
     posts = load_posts()
     categories = category_index(posts)
+    ai_infra_category = next((item for item in categories if item["name"] == "AI Infra"), None)
+    if ai_infra_category is None:
+        ai_infra_category = {"name": "AI Infra", "slug": "ai-infra", "posts": [], "count": 0}
+    else:
+        categories.remove(ai_infra_category)
+    ai_infra_category["pages"] = [{"title": "大模型 AI Infra 学习地图", "url": "/ai-infra/"}]
+    ai_infra_category["count"] += 1
+    categories.insert(0, ai_infra_category)
 
     env = Environment(
         loader=FileSystemLoader(TEMPLATES),

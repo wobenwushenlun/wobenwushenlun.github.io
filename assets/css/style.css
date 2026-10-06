@@ -1091,7 +1091,8 @@ img {
   font-weight: 560;
 }
 
-.category-posts time {
+.category-posts time,
+.category-entry-kind {
   flex: none;
   color: var(--ink-soft);
   font-family: var(--mono);
