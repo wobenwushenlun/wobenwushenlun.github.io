@@ -63,6 +63,12 @@ YYYY-MM-DD-英文标题.md
 
 可以复制 `_drafts/note-template.md` 作为文章模板。完成后把文件移动到 `_posts`，并在文件名中补上发布日期。
 
+## 文章阅读顺序
+
+文章底部的上下篇按阅读顺序连接：以 `categories` 中的第一个分类分组，分类之间按首篇发布时间从早到晚排列；分类内先按文件名中的章节编号排列（如 `llm-agent-03-tool-calling`），无编号文章按发布时间接在编号文章之后。可在文章 front matter 中设置数字 `order` 覆盖自动识别的章节编号。首页和订阅仍按最新发布时间排列。
+
+修改阅读顺序逻辑后，可运行 `.\.conda\python.exe -m unittest test_navigation` 检查章节排序与分类边界。
+
 ## 发布到 GitHub Pages
 
 1. 在 GitHub 创建公开仓库 `wobenwushenlun.github.io`。

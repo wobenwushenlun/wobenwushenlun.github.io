@@ -130,6 +130,30 @@ def category_index(posts: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ]
 
 
+def reading_order(posts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for post in posts:
+        grouped.setdefault(post["category"], []).append(post)
+
+    def chapter_key(post: dict[str, Any]) -> tuple[float, datetime, str]:
+        number = post.get("order")
+        if number is None:
+            match = re.search(r"-(\d+)(?:-|$)", post["slug"])
+            number = int(match.group(1)) if match else math.inf
+        return float(number), post["date"], post["slug"]
+
+    # Keep categories contiguous; later chapters must not move a whole category.
+    categories = sorted(
+        grouped,
+        key=lambda name: (min(post["date"] for post in grouped[name]), name),
+    )
+    return [
+        post
+        for name in categories
+        for post in sorted(grouped[name], key=chapter_key)
+    ]
+
+
 def render_feed(site: dict[str, Any], posts: list[dict[str, Any]]) -> str:
     updated = posts[0]["date_iso"] if posts else datetime.now().isoformat()
     entries = []
@@ -267,9 +291,10 @@ def build() -> None:
         ),
     )
 
-    for index, post in enumerate(posts):
-        previous_post = posts[index + 1] if index + 1 < len(posts) else None
-        next_post = posts[index - 1] if index > 0 else None
+    ordered_posts = reading_order(posts)
+    for index, post in enumerate(ordered_posts):
+        previous_post = ordered_posts[index - 1] if index > 0 else None
+        next_post = ordered_posts[index + 1] if index + 1 < len(ordered_posts) else None
         write_text(
             f"notes/{post['slug']}/index.html",
             env.get_template("post.html").render(
