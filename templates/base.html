@@ -72,9 +72,14 @@
       </div>
       <div class="shell footer-bottom">
         <span>© 2026 {{ site.author.name }}</span>
+        <span class="site-stats" aria-label="网站访问统计">
+          <span id="busuanzi_container_site_pv" style="display: none">总访问 <span id="busuanzi_value_site_pv"></span> 次</span>
+          <span id="busuanzi_container_site_uv" style="display: none">访客 <span id="busuanzi_value_site_uv"></span> 人次</span>
+        </span>
         <span>Generated with Python · Hosted on GitHub Pages</span>
       </div>
     </footer>
     <script src="/assets/js/main.js" defer></script>
+    <script src="/assets/js/analytics.js" data-site-url="{{ site.url }}" defer></script>
   </body>
 </html>
